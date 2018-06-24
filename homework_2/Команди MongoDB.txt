@@ -1,0 +1,6 @@
+1){age:{$gte:15, $lte:20}}
+2){$or:[{name:"Ivan"},{name:"Bogdan"},{name:"Vasyl"},{hobby:{$size:2}},{hobby:{$size:4}}]}
+3){hobby:{$size:{$gt:3}}}
+4) {mail: {$regex:"@ukr.net"}}
+5) {hobby: null}
+6) { "mail": "" } 
