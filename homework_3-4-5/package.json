@@ -53,8 +53,8 @@
     "express-winston": "2.5.0",
     "helmet": "3.12.0",
     "http-status": "1.0.1",
-    "joi": "10.6.0",
-    "jsonwebtoken": "7.1.9",
+    "joi": "^10.6.0",
+    "jsonwebtoken": "false8.3.0",
     "method-override": "^2.3.10",
     "mongoose": "4.7.4",
     "morgan": "1.9.0",
@@ -62,10 +62,12 @@
     "winston": "2.4.1"
   },
   "devDependencies": {
+    "bcrypt": "false2.0.1",
     "chai": "4.1.2",
     "commitizen": "^2.9.6",
     "coveralls": "^3.0.0",
     "cross-env": "5.1.4",
+    "crypto": "false1.0.1",
     "cz-conventional-changelog": "1.2.0",
     "eslint": "3.16.1",
     "eslint-config-airbnb-base": "7.1.0",
@@ -74,6 +76,7 @@
     "husky": "0.14.3",
     "istanbul": "1.1.0-alpha.1",
     "mocha": "3.5.0",
+    "nodemailer": "false4.6.7",
     "supertest": "3.0.0",
     "supertest-as-promised": "4.0.2",
     "validate-commit-msg": "^2.14.0"

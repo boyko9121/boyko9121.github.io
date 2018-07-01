@@ -21,8 +21,11 @@ if (config.env === 'development') {
 }
 
 // parse body params and attache them to req.body
+app.use('/api/products/img/', express.static('uploads'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 app.use(cookieParser());
 app.use(compress());

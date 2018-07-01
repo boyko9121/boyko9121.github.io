@@ -107,7 +107,6 @@ function remove(req, res, next) {
 function searchCategories(req, res, next) {
 
 
-  console.log(req.body.name + "dffffffffffffffffffffffffffffffffff");
   const oler = req.body.name;
   return oler;
 }

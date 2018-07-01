@@ -2,15 +2,45 @@ const Products = require('./products.model');
 const mongoose = require('mongoose');
 const Categories = mongoose.model('Categories');
 const ObjectId = require('mongoose').ObjectId;
+const multer = require('multer');
+
+/**
+ * Завантаження фото продукту
+ */
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, './uploads');
+  },
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+}
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
+
 /**
  * Load products and append to req.
  */
 function load(req, res, next, id) {
   Products.findById(id)
     .populate('categories')
-    .exec((err, doc) => {
-      if (err) throw err;
-      return res.json(doc);
+    .then((products) => {
+      req.products = products; // eslint-disable-line no-param-reassign
+      return next();
     })
 }
 
@@ -20,8 +50,7 @@ function load(req, res, next, id) {
  */
 function get(req, res) {
 
-  // return res.json(req.products);
-  //return res.send("OK!!!");
+  return res.json(req.products);
 }
 
 /**
@@ -33,18 +62,17 @@ function get(req, res) {
  * @returns {Products}
  */
 
-
-
 function create(req, res, next) {
+  console.log(req.file);
   let categorie = req.body.categorie;
   Categories.findOne({
     name: categorie
   }, function(err, doc) {
     if (doc !== null) {
 
-      const products = new Products({
+      let products = new Products({
         name: req.body.name,
-        photo: req.body.photo,
+        photo: "/api/products/img/" + req.file.filename,
         categories: doc._id,
         price: {
           value: req.body.price.value,
@@ -60,14 +88,30 @@ function create(req, res, next) {
         sizeDiscount: req.body.sizeDiscount,
         line: req.body.line
       });
-      console.log('products', products);
+      //  console.log('products', products);
       products.save()
-        .then(savedproducts => {
-          console.log('products2', savedproducts);
-          return res.json({
-            'test': savedproducts
-          });
-        })
+        .then(savedproducts => res.json(savedproducts))
+        .catch(e => next(e));
+    } else {
+      let products = new Products({
+        name: req.body.name,
+        photo: "/api/products/img/" + req.file.filename,
+        price: {
+          value: req.body.price.value,
+          currency: req.body.price.currency
+        },
+        availability: req.body.availability,
+        dimensions: {
+          length: req.body.dimensions.length,
+          heigth: req.body.dimensions.heigth,
+          width: req.body.dimensions.width
+        },
+        promotional: req.body.promotional,
+        sizeDiscount: req.body.sizeDiscount,
+        line: req.body.line
+      });
+      products.save()
+        .then(savedproducts => res.json(savedproducts))
         .catch(e => next(e));
     }
   })
@@ -80,11 +124,9 @@ function create(req, res, next) {
  * @returns {Products}
  */
 function update(req, res, next) {
-  console.log("LOIUDJKDKDKDKD" + req.body);
+
   const products = req.products;
   products.name = req.body.name;
-  products.categorie = req.body.categorie;
-  products.photo = req.body.photo;
   products.price.value = req.body.price.value;
   products.price.currency = req.body.price.currency;
   products.availability = req.body.availability;
@@ -149,5 +191,6 @@ module.exports = {
   create,
   update,
   list,
-  remove
+  remove,
+  upload
 };

@@ -39,23 +39,29 @@ const ProductsSchema = new mongoose.Schema({
   dimensions: {
     length: {
       type: Number,
+      required: true
     },
     heigth: {
       type: Number,
+      required: true
     },
     width: {
       type: Number,
+      required: true
     }
   },
   promotional: {
-    type: Boolean
+    type: Boolean,
+    required: true
   },
   sizeDiscount: {
     type: String,
-    match: [/^[0-9]{1,3}%$/, "%"]
+    match: [/^[0-9]{1,3}%$/, "%"],
+    required: true
   },
   line: {
-    type: Number
+    type: Number,
+    required: true
   }
 });
 

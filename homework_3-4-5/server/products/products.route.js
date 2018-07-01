@@ -3,6 +3,7 @@ const validate = require('express-validation');
 const paramValidation = require('../../config/param-validation');
 const productsCtrl = require('./products.controller');
 
+
 const router = express.Router(); // eslint-disable-line new-cap
 
 router.route('/')
@@ -10,7 +11,7 @@ router.route('/')
   .get(productsCtrl.list)
 
   /** POST /api/productss - Create new products */
-  .post(validate(paramValidation.creatProducts), productsCtrl.create);
+  .post(productsCtrl.upload.single('photo'), validate(paramValidation.creatProducts), productsCtrl.create);
 //
 router.route('/:productsId')
   /** GET /api/productss/:productsId - Get products */
